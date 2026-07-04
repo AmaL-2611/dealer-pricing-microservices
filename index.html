@@ -66,7 +66,9 @@
       if(!pid) return;
       const dealers = await fetchDealers(pid);
       const out = el('output');
+      const priceOut = el('price-output');
       out.innerHTML = '';
+      priceOut.innerHTML = '';
       if(dealers.length===0){ out.textContent = 'No dealers found'; return; }
       const ul = document.createElement('ul');
       dealers.forEach(d=>{
@@ -75,6 +77,8 @@
         ul.appendChild(li);
       });
       out.appendChild(ul);
+      const bestDealer = dealers.reduce((best, current) => current.price < best.price ? current : best, dealers[0]);
+      priceOut.textContent = `Price offered by dealer for selected product: ${bestDealer.dealerName} — $${bestDealer.price}`;
     }
 
     window.addEventListener('DOMContentLoaded', init);
@@ -87,6 +91,7 @@
     </select>
   </div>
 
+  <div id="price-output" style="margin-top:16px; font-weight: bold;"></div>
   <div id="output" style="margin-top:20px"></div>
 
 </body>
